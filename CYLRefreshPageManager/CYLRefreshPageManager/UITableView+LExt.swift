@@ -17,7 +17,16 @@ public class CYLRefreshPageManager {
     
 }
 
+public enum LRefreshStatus {
+    case none
+    case success
+    case noMoreData
+    case error
+}
+
 public typealias LRefreshActionType = ((_ page: Int) -> Void)?
+
+public typealias LRefreshResult<T> = ((_ dataSource: [T], _ status: LRefreshStatus) -> Void)?
 
 public protocol LRefresh {
     ///首页
@@ -27,8 +36,8 @@ public protocol LRefresh {
     ///记录失败时页数
     var l_lastPage: Int {get set}
     
-//    var mj_header: MJRefreshHeader! {get set}
-//    var mj_footer: MJRefreshFooter! {get set}
+    //    var mj_header: MJRefreshHeader! {get set}
+    //    var mj_footer: MJRefreshFooter! {get set}
     
     ///数据刷新方法
     func reloadData()
@@ -44,6 +53,11 @@ public protocol LRefresh {
     ///   - footer: 上拉刷新block
     ///   - footerType: 刷新尾类型
     mutating func setRefresh(header: ((_ page: Int) -> Void)?, headerType: MJRefreshHeader.Type, footer: ((_ page: Int) -> Void)?, footerType: MJRefreshFooter.Type)
+    
+    mutating func setRefresh(header: ((_ page: Int) -> Void)?, headerType: MJRefreshHeader.Type)
+    
+    mutating func setRefresh(footer: ((_ page: Int) -> Void)?, footerType: MJRefreshFooter.Type)
+    
     func footerHasmore(_ hasmore: Bool)
     
     ///刷新成功
@@ -51,14 +65,14 @@ public protocol LRefresh {
     ///刷新失败
     mutating func refreshError()
     
-
     /// 自动管理刷新
     ///
     /// - Parameters:
     ///   - dataSource: 数据源数组
     ///   - hasmore: 是否更多
     ///   - newData: 新数据
-    mutating func refresh(dataSource:inout [Any]?, hasmore: Bool, newData: [Any]?)
+    ///   - result: 数据源处理结果 通常需要 self.dataSource = dataSource
+    mutating func refresh <T>(dataSource: [T]?, hasmore: Bool, newData: [T]?, result: LRefreshResult<T>)
 }
 
 ///LRefresh RuntimeKey
@@ -119,6 +133,11 @@ public extension LRefresh where Self: UIScrollView {
     ///   - footer: 上拉刷新block
     ///   - footerType: 刷新尾类型
     mutating func setRefresh(header: ((Int) -> Void)?, headerType: MJRefreshHeader.Type = MJRefreshNormalHeader.self, footer: ((Int) -> Void)?, footerType: MJRefreshFooter.Type = MJRefreshAutoNormalFooter.self) {
+        self.setRefresh(header: header, headerType: headerType)
+        self.setRefresh(footer: footer, footerType: footerType)
+    }
+    
+    mutating func setRefresh(header: ((_ page: Int) -> Void)?, headerType: MJRefreshHeader.Type) {
         if let header = header {
             self.mj_header = headerType.init(refreshingBlock: { [weak self] in
                 guard var weakSelf = self else {
@@ -131,6 +150,9 @@ public extension LRefresh where Self: UIScrollView {
                 }
             })
         }
+    }
+    
+    mutating func setRefresh(footer: ((_ page: Int) -> Void)?, footerType: MJRefreshFooter.Type) {
         if let footer = footer {
             self.mj_footer = footerType.init(refreshingBlock: { [weak self] in
                 guard var weakSelf = self else {
@@ -190,21 +212,24 @@ public extension LRefresh where Self: UIScrollView {
     }
     
     ///自动管理刷新
-    mutating func refresh(dataSource:inout [Any]?, hasmore: Bool, newData: [Any]?) {
-        if dataSource == nil {
+    mutating func refresh <T>(dataSource: [T]?, hasmore: Bool, newData: [T]?, result: LRefreshResult<T>) {
+        guard var dataSource = dataSource else {
+            result?([T](), .error)
             self.refreshError()
             return
         }
         
         if self.l_page == self.l_first_page {
-            dataSource!.removeAll()
+            dataSource.removeAll()
         }
         
-        if newData == nil {
+        guard let newData = newData else {
+            result?(dataSource, .error)
             self.refreshError()
             return
         }
-        dataSource! += newData!
+        dataSource += newData
+        result?(dataSource, hasmore ? .success : .noMoreData)
         self.refreshSuccess()
         self.footerHasmore(hasmore)
     }
