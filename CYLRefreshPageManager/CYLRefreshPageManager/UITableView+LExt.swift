@@ -9,17 +9,17 @@
 import UIKit
 import MJRefresh
 
-class CYLRefreshPageManager {
+public class CYLRefreshPageManager {
     
-    static let share = CYLRefreshPageManager()
+    public static let share = CYLRefreshPageManager()
     //配置默认起始页
-    var first_page: Int = 1;
+    public var first_page: Int = 1;
     
 }
 
-typealias LRefreshActionType = ((_ page: Int) -> Void)?
+public typealias LRefreshActionType = ((_ page: Int) -> Void)?
 
-protocol LRefresh {
+public protocol LRefresh {
     ///首页
     var l_first_page: Int {get set}
     ///页码
@@ -69,7 +69,7 @@ private struct AssociatedKeys {
     static var refreshAction: Void?
 }
 
-extension LRefresh where Self: UIScrollView {
+public extension LRefresh where Self: UIScrollView {
     
     
     var l_first_page: Int {
@@ -118,7 +118,7 @@ extension LRefresh where Self: UIScrollView {
     ///   - headerType: 刷新头类型
     ///   - footer: 上拉刷新block
     ///   - footerType: 刷新尾类型
-    internal mutating func setRefresh(header: ((Int) -> Void)?, headerType: MJRefreshHeader.Type = MJRefreshNormalHeader.self, footer: ((Int) -> Void)?, footerType: MJRefreshFooter.Type = MJRefreshAutoNormalFooter.self) {
+    mutating func setRefresh(header: ((Int) -> Void)?, headerType: MJRefreshHeader.Type = MJRefreshNormalHeader.self, footer: ((Int) -> Void)?, footerType: MJRefreshFooter.Type = MJRefreshAutoNormalFooter.self) {
         if let header = header {
             self.mj_header = headerType.init(refreshingBlock: { [weak self] in
                 guard var weakSelf = self else {
@@ -148,7 +148,7 @@ extension LRefresh where Self: UIScrollView {
     
     
     ///更多数据
-    internal func footerHasmore(_ hasmore: Bool) {
+    func footerHasmore(_ hasmore: Bool) {
         guard self.mj_footer != nil else {
             return
         }
@@ -159,7 +159,7 @@ extension LRefresh where Self: UIScrollView {
         }
     }
     ///刷新成功
-    internal mutating func refreshSuccess() {
+    mutating func refreshSuccess() {
         if self.l_page == CYLRefreshPageManager.share.first_page {
             if self.mj_header != nil {
                 self.mj_header.endRefreshing()
@@ -173,7 +173,7 @@ extension LRefresh where Self: UIScrollView {
         self.reloadData()
     }
     ///刷新失败
-    internal mutating func refreshError() {
+    mutating func refreshError() {
         if self.mj_header != nil {
             self.mj_header.endRefreshing()
         }
@@ -190,7 +190,7 @@ extension LRefresh where Self: UIScrollView {
     }
     
     ///自动管理刷新
-    internal mutating func refresh(dataSource:inout [Any]?, hasmore: Bool, newData: [Any]?) {
+    mutating func refresh(dataSource:inout [Any]?, hasmore: Bool, newData: [Any]?) {
         if dataSource == nil {
             self.refreshError()
             return

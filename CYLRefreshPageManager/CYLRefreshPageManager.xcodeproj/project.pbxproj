@@ -7,14 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		06F48BC8226245570052F962 /* CYLRefreshPageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 06F48BC6226245570052F962 /* CYLRefreshPageManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		06F48BD12262480D0052F962 /* UITableView+LExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F48BD02262480D0052F962 /* UITableView+LExt.swift */; };
 		355D8C5386F605003BACE06E /* Pods_CYLRefreshPageManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DC9BD6BE0762073FC624C0D7 /* Pods_CYLRefreshPageManager.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		06F48BC3226245570052F962 /* CYLRefreshPageManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CYLRefreshPageManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		06F48BC6226245570052F962 /* CYLRefreshPageManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYLRefreshPageManager.h; sourceTree = "<group>"; };
 		06F48BC7226245570052F962 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		06F48BD02262480D0052F962 /* UITableView+LExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITableView+LExt.swift"; sourceTree = "<group>"; };
 		2FBA8E3C3187CFF7625B1167 /* Pods-CYLRefreshPageManager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CYLRefreshPageManager.release.xcconfig"; path = "Target Support Files/Pods-CYLRefreshPageManager/Pods-CYLRefreshPageManager.release.xcconfig"; sourceTree = "<group>"; };
@@ -63,7 +61,6 @@
 		06F48BC5226245570052F962 /* CYLRefreshPageManager */ = {
 			isa = PBXGroup;
 			children = (
-				06F48BC6226245570052F962 /* CYLRefreshPageManager.h */,
 				06F48BD02262480D0052F962 /* UITableView+LExt.swift */,
 				06F48BC7226245570052F962 /* Info.plist */,
 			);
@@ -86,7 +83,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06F48BC8226245570052F962 /* CYLRefreshPageManager.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
