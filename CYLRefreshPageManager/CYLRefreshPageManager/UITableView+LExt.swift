@@ -164,7 +164,7 @@ public extension LRefresh where Self: UIScrollView {
                     refreshAction(weakSelf.l_page)
                 }
             })
-            self.mj_footer.isAutomaticallyChangeAlpha = true
+            self.mj_footer?.isAutomaticallyChangeAlpha = true
         }
     }
     
@@ -175,20 +175,20 @@ public extension LRefresh where Self: UIScrollView {
             return
         }
         if hasmore {
-            self.mj_footer.resetNoMoreData()
+            self.mj_footer?.resetNoMoreData()
         } else {
-            self.mj_footer.endRefreshingWithNoMoreData()
+            self.mj_footer?.endRefreshingWithNoMoreData()
         }
     }
     ///刷新成功
     mutating func refreshSuccess() {
         if self.l_page == CYLRefreshPageManager.share.first_page {
             if self.mj_header != nil {
-                self.mj_header.endRefreshing()
+                self.mj_header?.endRefreshing()
             }
         } else {
             if self.mj_footer != nil {
-                self.mj_footer.endRefreshing()
+                self.mj_footer?.endRefreshing()
             }
         }
         self.l_lastPage = self.l_page
@@ -197,10 +197,10 @@ public extension LRefresh where Self: UIScrollView {
     ///刷新失败
     mutating func refreshError() {
         if self.mj_header != nil {
-            self.mj_header.endRefreshing()
+            self.mj_header?.endRefreshing()
         }
         if self.mj_footer != nil {
-            self.mj_footer.endRefreshing()
+            self.mj_footer?.endRefreshing()
         }
         if self.l_page == self.l_first_page {
             self.l_page = self.l_first_page
